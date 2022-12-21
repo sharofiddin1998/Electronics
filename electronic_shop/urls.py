@@ -19,23 +19,35 @@ from . import views
 from api.views import *
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Electronics API",
+        default_version='v1',
+        description="Electronics APIsi",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="qoziyevsharofiddin199805@gmail.com"),
+        license=openapi.License(name="Electronics litsenziyasi"),
+    ),
+    public=True,
+    # permission_classes=[permissions.AllowAny, ],
+)
 urlpatterns = [
-    # path('api/v1/categories/', CategoriesAPIView.as_view()),
-    # path('api/v1/brand/', BrandAPIView.as_view()),
-    # path('api/v1/color/', ColorAPIView.as_view()),
-    # path('api/v1/filter_price/', Filter_PriceAPIView.as_view()),
-    # path('api/v1/product', ProductAPIView.as_view()),
-    # path('api/v1/images/', ImagesAPIView.as_view()),
-    # path('api/v1/tag/', TagAPIView.as_view()),
-    # path('api/v1/contact_us/', Contact_usAPIView.as_view()),
     path('admin/', admin.site.urls),
     path('', views.HOME, name='home'),
     path('api-auth/', include('rest_framework.urls')),
     # path('api-token-auth/', views.obtain_auth_token),
     path('auth/', include('djoser.urls')),
+    path('api/accounts/', include("accounts.urls")),
     path('auth/', include('djoser.urls.authtoken')),
-    path('', include('api.urls')),
+    path('api/v1/', include('api.urls')),
+    path('api/v1/allauth/', include('allauth.urls')),
+    path('api/v1/dj-rest-auth/', include('dj_rest_auth.urls')),
+    path('api/v1/dj-rest-auth/registration/',
+         include('dj_rest_auth.registration.urls')),
     path('auth/', include('djoser.urls.jwt')),
     path('base/', views.BASE, name='base'),
     path('products/', views.PRODUCT, name='products'),
@@ -56,5 +68,9 @@ urlpatterns = [
     path('cart/cart_clear/', views.cart_clear, name='cart_clear'),
     path('cart/cart_detail/', views.cart_detail, name='cart_detail'),
     path('cart/checkout/', views.Check_out, name='checkout'),
+    path('swagger/', schema_view.with_ui('swagger',
+                                         cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc',
+                                       cache_timeout=0), name='schema-redoc'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

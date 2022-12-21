@@ -6,7 +6,7 @@ from el_shops.models import *
 class CategoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Categories
-        fields = ('id', 'name',)
+        fields = '__all__'
 
 
 class CategoriesDetailSerializer(serializers.ModelSerializer):
@@ -33,19 +33,7 @@ class ColorSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'color',)
 
 
-class ColorDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Color
-        fields = ('id', 'name', 'color',)
-
-
 class Filter_PriceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Filter_Price
-        fields = ('id', 'price',)
-
-
-class Filter_PriceDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Filter_Price
         fields = ('id', 'price',)
@@ -59,27 +47,29 @@ class ProductSerializer(serializers.ModelSerializer):
         #           'price', 'condition', 'information', 'description', 'stock', 'status', 'create_date')
 
 
-class ProductDetailSerializer(serializers.ModelSerializer):
-    brand = BrandDetailSerializer(read_only=True, many=True)
-    color = ColorDetailSerializer(read_only=True, many=True)
-    categories = CategoriesDetailSerializer(read_only=True, many=True)
-    filter_price = Filter_PriceDetailSerializer(read_only=True, many=True)
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = "__all__"
+
+
+class OrderProductSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+    order = OrderSerializer()
 
     class Meta:
-        model = Product
-        # exclude = ('unique_id', 'image', 'name',
-        #            'price', 'condition', 'information', 'description', 'stock', 'status', 'create_date')
+        model = OrderProduct
+        fields = "__all__"
 
 
 class ImagesSerializer(serializers.ModelSerializer):
     class Meta:
-        product = ProductDetailSerializer(read_only=True, many=True)
+
         model = Images
         fields = ('id', 'image', 'product',)
 
 
 class TagSerializer(serializers.ModelSerializer):
-    product = ProductDetailSerializer(read_only=True, many=True)
 
     class Meta:
         model = Tag

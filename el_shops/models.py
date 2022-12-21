@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from ckeditor.fields import RichTextField
+from django.contrib.auth.models import User
 # Create your models here.
 
 
@@ -52,8 +53,7 @@ class Product(models.Model):
     description = RichTextField(null=True)
     stock = models.CharField(choices=STOCK, max_length=200)
     status = models.CharField(choices=STATUS, max_length=200)
-    create_date = models.DateTimeField(default=timezone.now)
-
+    create_date = models.DateTimeField(default=timezone.now)    
     categories = models.ForeignKey(Categories, on_delete=models.CASCADE)
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     color = models.ForeignKey(Color, on_delete=models.CASCADE)
@@ -67,6 +67,19 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Order(models.Model):
+    products = models.ManyToManyField(Product, through='OrderProduct')
+    created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class OrderProduct(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, default=1)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, default=1)
+    price = models.FloatField(default=0)
+    quantity = models.IntegerField(default=0)
 
 
 class Images(models.Model):

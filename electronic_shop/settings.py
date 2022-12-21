@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'el_shops',
     'ckeditor',
     'api',
@@ -45,20 +46,32 @@ INSTALLED_APPS = [
     'djoser',
     'rest_framework_simplejwt',
     'cart',
+    'dj_rest_auth',
     'rest_framework',
+    'allauth',
+    'allauth.account',
+    'drf_yasg',
+    'accounts',
 ]
 
 CART_SESSION_ID = 'cart'
-
+SITE_ID = 1
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+'rest_framework.authentication.TokenAuthentication',
+'rest_framework.authentication.BasicAuthentication',
+'rest_framework.authentication.SessionAuthentication',
+# 'DEFAULT_FILTER_BACKENDS': (
+#     'django_filters.rest_framework.DjangoFilterBackend'
+# ),
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend'
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
 

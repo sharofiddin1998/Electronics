@@ -1,27 +1,29 @@
+from rest_framework.urlpatterns import format_suffix_patterns
 from django.urls import path
-from api.views import *
-from rest_framework.routers import DefaultRouter
+from django.urls import include, path
+from rest_framework import routers
+from api import views
 
-router = DefaultRouter()
-router.register(r'categories', CategoriesViewSet, basename='category')
-router.register(r'brands', BrandViewSet, basename='brand')
-router.register(r'colors', ColorViewSet, basename='color')
-router.register(r'filter_prices', Filter_PriceViewSet, basename='filter_price')
-router.register(r'products', ProductViewSet, basename='product')
-router.register(r'images', ImagesViewSet, basename='image')
-router.register(r'tags', TagViewSet, basename='tag')
-router.register(r'contacts', ContactViewSet, basename='contact')
-urlpatterns = router.urls
 
-# urlpatterns = [
-#     # path('api/v1/categories/', CategoriesAPIView.as_view()),
-#     # path('api/v1/brand/<int:pk>/', BrandAPIView.as_view()),
-#     path('api/v1/brand/', BrandAPIView.as_view()),
-#     path('api/v1/color/', ColorAPIView.as_view()),
-#     path('api/v1/filter_price/', Filter_PriceAPIView.as_view()),
-#     path('api/v1/product/<int:pk>/', ProductDetailAPIView.as_view()),
-#     path('api/v1/product/', ProductAPIView.as_view()),
-#     path('api/v1/images/', ImagesAPIView.as_view()),
-#     path('api/v1/tag/', TagAPIView.as_view()),
-#     path('api/v1/contact_us/', Contact_usAPIView.as_view()),
-# ]
+urlpatterns = [
+    path('orders/', views.order_list),
+    path('order/<int:pk>/', views.order_detail),
+    path('products/', views.product_list),
+    path('product/<int:pk>/', views.product_detail),
+    path("orderproduct_list/", views.orderproduct_list),
+    path('order_product/<int:pk>/', views.orderproduct_detail),
+    path('total_order_product/', views.total_order_product),
+    path('order_product_list/', views.order_product_list),
+]
+
+# urlpatterns = format_suffix_patterns(urlpatterns)
+# router = routers.DefaultRouter()
+# router.register(r'categories', views.CategoriesViewSet, basename='category')
+# router.register(r'brands', views.BrandViewSet, basename='brand')
+# router.register(r'colors', views.ColorViewSet, basename='color')
+# router.register(r'filter_prices', views.Filter_PriceViewSet,
+#                 basename='filter_price')
+# router.register(r'images', views.ImagesViewSet, basename='image')
+# router.register(r'tags', views.TagViewSet, basename='tag')
+# router.register(r'contacts', views.ContactViewSet, basename='contact')
+# urlpatterns = router.urls
